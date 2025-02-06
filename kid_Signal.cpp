@@ -139,18 +139,15 @@ float Signal::Smooth::getSmooth() const {
   return smooth;
 }
 
-// Конструктор для фильтра AC, инициализирует окно.
-Signal::AC::AC(int _samples = 10) {
+// Конструктор для фильтра baseZero, инициализирует окно.
+Signal::baseZero::baseZero(int _samples = 10) {
   window = Window(_samples);
 }
 
-// Применяет фильтр AC, вычитая минимальное значение окна.
-float Signal::AC::apply(float _val){
+// Применяет фильтр baseZero, вычитая минимальное значение окна.
+float Signal::baseZero::apply(float _val){
   window.stepMove(_val);
-  if (window.getMin() > 0)
     return _val - window.getMin();
-  else
-    return _val;
 }
 
 // Конструктор для усилителя, устанавливает начальные параметры.

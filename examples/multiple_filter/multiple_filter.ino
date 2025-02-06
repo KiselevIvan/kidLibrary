@@ -28,8 +28,8 @@ void loop() {
   // Применение фильтров
   float bgRemovedValue = signal.bgRemove.apply(rawValue);
   float smoothedValue = signal.smooth.apply(bgRemovedValue);
-  float acValue = signal.ac.apply(smoothedValue);
-  float amplifiedValue = signal.amp.apply(acValue);
+  float baseZeroValue = signal.baseZero.apply(smoothedValue);
+  float amplifiedValue = signal.amp.apply(baseZeroValue);
 
   // Вывод данных в Serial Monitor
   Serial.print("Сырой сигнал: ");
@@ -38,8 +38,8 @@ void loop() {
   Serial.print(bgRemovedValue);
   Serial.print(", Сглаживание: ");
   Serial.print(smoothedValue);
-  Serial.print(", AC фильтр: ");
-  Serial.print(acValue);
+  Serial.print(", baseZero фильтр: ");
+  Serial.print(baseZeroValue);
   Serial.print(", Усиление: ");
   Serial.println(amplifiedValue);
 

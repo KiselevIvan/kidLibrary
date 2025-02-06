@@ -14,7 +14,7 @@
        Резистор 10 кОм -> A1 -> Два конденсатора по 100 нФ параллельно к земле.
 
   2. Сигналы с A0 (ФВЧ) и A1 (ФНЧ) проходят обработку:
-     - Фильтр AC: удаление постоянной составляющей.
+     - Фильтр baseZero: удаление постоянной составляющей.
      - Усиление: сигнал усиливается в 3 раза.
      - Сглаживание: для уменьшения шума.
 
@@ -47,14 +47,14 @@ void setup() {
   Serial.begin(9600);
 
   // Настройка фильтров для RC-цепочки ФВЧ
-  signalHP.ac = Signal::AC(10);     // Фильтр AC с окном из 10 значений
+  signalHP.baseZero = Signal::baseZero(10);     // Фильтр baseZero с окном из 10 значений
   signalHP.amp.setGain(3.0);        // Усиление в 3 раза
   signalHP.amp.setMin(0);           // Минимальное значение усиления
   signalHP.amp.setMax(1023);        // Максимальное значение усиления
   signalHP.smooth.setSmooth(0.5);   // Коэффициент сглаживания
 
   // Настройка фильтров для RC-цепочки ФНЧ
-  signalLP.ac = Signal::AC(10);     // Фильтр AC с окном из 10 значений
+  signalLP.baseZero = Signal::baseZero(10);     // Фильтр baseZero с окном из 10 значений
   signalLP.amp.setGain(3.0);        // Усиление в 3 раза
   signalLP.amp.setMin(0);           // Минимальное значение усиления
   signalLP.amp.setMax(1023);        // Максимальное значение усиления
@@ -71,13 +71,13 @@ void loop() {
   int rawValueLP = analogRead(PIN_RC_LP); // Вход через ФНЧ
 
   // Обработка сигнала RC-цепочки ФВЧ
-  float acValueHP = signalHP.ac.apply(rawValueHP);        // Фильтр AC
-  float amplifiedValueHP = signalHP.amp.apply(acValueHP); // Усиление сигнала
+  float baseZeroValueHP = signalHP.baseZero.apply(rawValueHP);        // Фильтр baseZero
+  float amplifiedValueHP = signalHP.amp.apply(baseZeroValueHP); // Усиление сигнала
   float smoothedValueHP = signalHP.smooth.apply(amplifiedValueHP); // Сглаживание
 
   // Обработка сигнала RC-цепочки ФНЧ
-  float acValueLP = signalLP.ac.apply(rawValueLP);        // Фильтр AC
-  float amplifiedValueLP = signalLP.amp.apply(acValueLP); // Усиление сигнала
+  float baseZeroValueLP = signalLP.baseZero.apply(rawValueLP);        // Фильтр baseZero
+  float amplifiedValueLP = signalLP.amp.apply(baseZeroValueLP); // Усиление сигнала
   float smoothedValueLP = signalLP.smooth.apply(amplifiedValueLP); // Сглаживание
 
   // Приводим сигнал к диапазону 8 бит (0–255)

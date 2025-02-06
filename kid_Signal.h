@@ -97,13 +97,13 @@ class Signal {
         float smooth; // Коэффициент сглаживания
     };
 
-    // Фильтр для вычитания переменной части сигнала (для постоянного сигнала)
-    class AC: public Filter {
+    // Выравнивает сигнал так, чтобы минимум скользящего окна был нулём
+    class baseZero: public Filter {
       public:
         // Конструктор с заданным количеством выборок для окна
-        AC(int _samples = 10);
+        baseZero(int _samples = 10);
         
-        // Применяет фильтр AC
+        // Применяет фильтр baseZero
         float apply(float _val) override;
         
         Window window; // Окно для сбора данных
@@ -144,7 +144,7 @@ class Signal {
 
     BgRemove bgRemove; // Экземпляр фильтра BgRemove
     Smooth smooth; // Экземпляр фильтра Smooth
-    AC ac; // Экземпляр фильтра AC
+    baseZero baseZero; // Экземпляр фильтра baseZero
     Amp amp; // Экземпляр фильтра Amp
 };
 
